@@ -699,16 +699,6 @@ static inline int wpa_drv_mlme_remove_sta(struct wpa_supplicant *wpa_s,
 	return -1;
 }
 
-#ifdef ANDROID
-static inline int wpa_drv_signal_poll(struct wpa_supplicant *wpa_s,
-				      struct wpa_signal_info *si)
-{
-	if (wpa_s->driver->signal_poll)
-		return wpa_s->driver->signal_poll(wpa_s->drv_priv, si);
-	return -1;
-}
-#endif
-
 static inline int wpa_drv_driver_cmd(struct wpa_supplicant *wpa_s,
 					  char *cmd, char *buf, size_t buf_len)
 {

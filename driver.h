@@ -228,6 +228,18 @@ struct ieee80211_rx_status {
         int ssi;
 };
 
+#ifdef ANDROID
+/**
+ * struct wpa_signal_info - Information about channel signal quality
+ */
+struct wpa_signal_info {
+	u32 frequency;
+	int above_threshold;
+	int current_signal;
+	int current_noise;
+	int current_txrate;
+};
+#endif
 
 /**
  * struct wpa_driver_ops - Driver interface API definition
@@ -242,6 +254,14 @@ struct wpa_driver_ops {
 	/** One line description of the driver interface */
 	const char *desc;
 
+#ifdef ANDROID
+	/**
+	 * struct wpa_driver_ops - Driver interface API definition
+	 *
+	 * This structure defines the API that each driver interface needs to implement 
+	 */
+ 	struct wpa_interface_info * (*get_interfaces)(void *global_priv);
+#endif
 	/**
 	 * get_bssid - Get the current BSSID
 	 * @priv: private driver interface data
@@ -752,6 +772,15 @@ struct wpa_driver_ops {
 	 * (management frame processing) to wpa_supplicant.
 	 */
 	 int (*mlme_remove_sta)(void *priv, const u8 *addr);
+
+#ifdef ANDROID
+	/**
+	 * signal_poll - Get current connection information
+	 * @priv: Private driver interface data
+	 * @signal_info: Connection info structure
+	 */
+	int (*signal_poll)(void *priv, struct wpa_signal_info *signal_info);
+#endif
 
     /**
      * driver_cmd - execute driver-specific command
